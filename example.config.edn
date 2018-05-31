@@ -1,0 +1,9 @@
+{:twilio {:account-sid "accountsidgoeshere"
+          :auth-token "authtokengoeshere"
+          :sending-phone "+15008675309"
+          :recipient-phone "+15008675309"}
+ :current-poll-file "current-poll.txt"
+ :board-games ["Love Letter"
+               "Scythe"
+               "Coup"]
+ :owner-name "Eleanor Rigby"}

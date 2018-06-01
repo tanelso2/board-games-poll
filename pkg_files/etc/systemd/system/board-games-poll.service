@@ -1,0 +1,12 @@
+[Unit]
+Description=Board games poll service
+
+[Service]
+ExecStart=/usr/bin/java -jar /opt/board-games-poll/board-games-poll-standalone.jar
+Restart=always
+WorkingDirectory=/opt/board-games-poll
+# TODO: Don't run this as root
+#User=
+
+[Install]
+WantedBy=multi-user.target

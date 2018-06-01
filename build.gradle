@@ -1,0 +1,44 @@
+plugins {
+    id "nebula.ospackage" version "4.3.0"
+}
+
+def now = "date +%Y%m%dT%H%M%S".execute().text.trim()
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.3.1'
+}
+
+clean.doFirst {
+    delete "target"
+}
+
+task uberjar(type: Exec) {
+    inputs.dir file("src")
+    commandLine "lein", "ring", "uberjar"
+    outputs.dir file("target")
+}
+
+task packDeb(type: Deb, dependsOn: uberjar) {
+    packageName = project.name
+    version = "0.1.0"
+    release = "${now}"
+
+    preInstall = file("pkg_scripts/preinst")
+    postInstall = file("pkg_scripts/postinst")
+    preUninstall = file("pkg_scripts/prerm")
+
+    requires("openjdk-8-jre-headless")
+
+    into("/opt/board-games-poll") {
+        from("target")
+        include("*-standalone.jar")
+        rename { String fileName -> "board-games-poll-standalone.jar" }
+    }
+    from("example.config.edn") {
+        into("/opt/board-games-poll")
+        rename { String fileName -> fileName.replace("example.", "") }
+    }
+    from("pkg_files/") {
+        into("/")
+    }
+}

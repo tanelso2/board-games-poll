@@ -7,7 +7,7 @@
             [board-games-poll.scheduler :as scheduler]))
 
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/" [] (actions/get-current-poll-url))
   (GET "/current-poll" [] (redirect (actions/get-current-poll-url)))
   (route/not-found "Not Found"))
 

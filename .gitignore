@@ -13,3 +13,5 @@ config.edn
 *.iml
 board-games.txt
 current-poll.txt
+.gradle/
+build/

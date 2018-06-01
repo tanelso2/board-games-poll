@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+systemctl disable board-games-poll.service
+
+exit 0

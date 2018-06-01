@@ -41,4 +41,6 @@ task packDeb(type: Deb, dependsOn: uberjar) {
     from("pkg_files/") {
         into("/")
     }
+
+    configurationFile = "/opt/board-games-poll/config.edn"
 }

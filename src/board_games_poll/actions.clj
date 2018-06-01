@@ -2,7 +2,11 @@
   (:require [clojure.string :as str]
             [clojure.data.json :as json]
             [org.httpkit.client :as http]
-            [board-games-poll.config :as config]))
+            [board-games-poll.config :as config]
+            [clj-time.core :as t]
+            [clj-time.predicates :refer [tuesday?]]
+            [clj-time.periodic :refer [periodic-seq]]
+            [clj-time.format :as f]))
 
 (def URL "https://www.strawpoll.me/api/v2/polls")
 
@@ -19,12 +23,21 @@
   []
   (sort (config/get-board-games)))
 
+(defn get-next-tuesday
+  []
+  (->> (periodic-seq (t/now) (t/days 1))
+       (filter tuesday?)
+       (first)))
+
+(defn format-date
+  [date]
+  (f/unparse (f/formatters :year-month-day) date))
+
 (defn get-poll-title
   []
-  ; TODO: Add dates and shit?
-  (str "What board games should "
-       (config/get-owner-name)
-       " bring?"))
+  (format "What board games should %s bring? (%s)"
+          (config/get-owner-name)
+          (format-date (get-next-tuesday))))
 
 (defn make-poll
   [title choices]
@@ -64,6 +77,25 @@
 (defn get-current-votes
   []
   (get-votes (get-current-poll-id)))
+
+(defn format-votes-message
+  [votes]
+  (->> votes
+       (sort-by (comp - second))
+       (filter (comp #(not= 0 %) second))
+       (map-indexed (fn [index [name number]]
+                      (format "%d. %s - %d vote%s"
+                              (inc index)
+                              name
+                              number
+                              (if (> number 1) "s" ""))))
+       (#(if (empty? %) "No votes!" (str/join \newline %)))
+       (str "Here are the results:\n")))
+
+(defn get-current-votes-message
+  []
+  (-> (get-current-votes)
+      (format-votes-message)))
 
 (defn get-current-poll-url
   []

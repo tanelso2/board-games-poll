@@ -44,7 +44,8 @@
   (let [headers {"Content-Type" "application/json"}
         body {:title   title
               :options choices
-              :multi   true}
+              :multi   true
+              :dupcheck "permissive"}
         body-str (json/write-str body)
         result @(http/post URL {:headers headers :body body-str})
         result-body (json/read-str (:body result))]

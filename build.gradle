@@ -20,7 +20,7 @@ task uberjar(type: Exec) {
 
 task packDeb(type: Deb, dependsOn: uberjar) {
     packageName = project.name
-    version = "0.2.0"
+    version = "0.2.1"
     release = "${now}"
 
     preInstall = file("pkg_scripts/preinst")

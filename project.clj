@@ -13,7 +13,8 @@
                  [org.slf4j/slf4j-api "1.7.5"]
                  [org.slf4j/slf4j-simple "1.6.4"]
                  [ring/ring-defaults "0.2.1"]]
-  :plugins [[lein-ring "0.9.7"]]
+  :plugins [[lein-ring "0.9.7"]
+            [lein-ns-dep-graph "0.2.0-SNAPSHOT"]]
   :ring {:handler board-games-poll.handler/app
          :init board-games-poll.handler/init}
   :profiles
